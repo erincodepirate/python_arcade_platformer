@@ -13,18 +13,20 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
-        self.wall_list = None
-        self.player_list = None
+        self.scene = None
+        self.player_sprite = None
 
     def setup(self):
-        self.player_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList()
+        self.scene = arcade.Scene()
+
+        self.scene.add_sprite_list("Player")
+        self.scene.add_sprite_list("Walls", use_spatial_hash=True)
 
         image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
         self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 128
-        self.player_list.append(self.player_sprite)
+        self.scene.add_sprite("Player", self.player_sprite)
 
         for x in range(0, 1250, 64):
             wall = arcade.Sprite(
@@ -32,7 +34,7 @@ class MyGame(arcade.Window):
                 TILE_SCALING)
             wall.center_x = x
             wall.center_y = 32
-            self.wall_list.append(wall)
+            self.scene.add_sprite("Walls", wall)
 
         coordinate_list = [[512, 96], [256, 96], [768, 96]]
 
@@ -44,8 +46,7 @@ class MyGame(arcade.Window):
     def on_draw(self):
         self.clear()
 
-        self.wall_list.draw()
-        self.player_list.draw()
+        self.scene.draw()
 
 def main():
     window = MyGame()
